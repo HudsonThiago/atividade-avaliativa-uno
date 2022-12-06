@@ -9,18 +9,23 @@ public class Telas {
 
         while(opcaoInvalida){
             printMainScreen();
-            Main.opcao = Utils.scanner.next();
-            if(Main.opcao.equals("1") || Main.opcao.equals("2") || Main.opcao.equals("3")){
-                opcaoInvalida = false;
-            } else {
-                Utils.clear();
+            try{
+                Main.opcao = Integer.parseInt(Utils.scanner.next());
+            } catch (NumberFormatException e){
                 System.out.println("\n(!) OPÇÃO INVÁLIDA! TENTE NOVAMENTE!\n");
+            } finally {
+                if(Main.opcao == 1 || Main.opcao == 2 || Main.opcao == 3){
+                    opcaoInvalida = false;
+                } else {
+                    Utils.clear();
+                    System.out.println("\n(!) OPÇÃO INVÁLIDA! TENTE NOVAMENTE!\n");
+                }
             }
         }
 
-        if(Main.opcao.equals("1")){
+        if(Main.opcao == 1){
             gameScreen();
-        } else if(Main.opcao.equals("2")){
+        } else if(Main.opcao == 2){
             ruleScreen();
         }
     }
@@ -36,7 +41,29 @@ public class Telas {
 
     private static void gameScreen(){
         Utils.clear();
-        System.out.println("");
+        boolean opcaoInvalida = true;
+
+        while(opcaoInvalida){
+
+            System.out.println("┌───────────────────────────────────────┐");
+            System.out.println("│  SELEÇÃO DE JOGADORES                 │");
+            System.out.println("└───────────────────────────────────────┘");
+            System.out.print("Digite o número de jogadores: ");
+
+            try{
+                Main.opcao = Integer.parseInt(Utils.scanner.next());
+            } catch (NumberFormatException e){
+                System.out.println("\n(!) OPÇÃO INVÁLIDA! TENTE NOVAMENTE!\n");
+            } finally {
+                if(Main.opcao >= 2 && Main.opcao <= 4){
+                    opcaoInvalida = false;
+                } else {
+                    Utils.clear();
+                    System.out.println("\n(!) Devem ter no mínimo 2 jogadores e no máximo 4 jogadores!\n");
+                }
+            }
+        }
+
     }
     private static void ruleScreen(){
         Utils.clear();
