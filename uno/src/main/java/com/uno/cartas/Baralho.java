@@ -1,15 +1,26 @@
 package com.uno.cartas;
 
-import java.util.HashSet;
-import java.util.Set;
+import com.uno.Main;
+import com.uno.utils.Utils;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class Baralho {
-    public Set<Carta> baralho = new HashSet();
+
+    public List<Carta> baralho = new ArrayList<>();
 
     public Baralho(){
         addCartasNormais();
         addCartasEspeciais();
         addCartasCoringa();
+    }
+
+    public Carta puxarCartaDoBaralho(){
+        int cartaSorteada = Utils.random.nextInt(baralho.size());
+        Carta carta = baralho.get(cartaSorteada);
+        baralho.remove(cartaSorteada);
+        return carta;
     }
 
     private void addCartasNormais(){
@@ -62,7 +73,7 @@ public class Baralho {
     }
 
     private void addCartasCoringa(){
-        for(int i=0;i<2;i++){
+        for(int i=0;i<4;i++){
             Carta cartaCoringa = new CartaCoringa("coringa", Classificacao.ESPECIAL.get());
             Carta cartaCoringaMaisQuatro = new CartaCoringa("+4", Classificacao.ESPECIAL.get());
 

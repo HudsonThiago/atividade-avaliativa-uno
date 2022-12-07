@@ -2,7 +2,7 @@ package com.uno.cartas;
 
 public enum Cores {
 
-    VERMELHO("#FF0000"), VERDE("#00FF00"), AMARELO("#000000"), AZUL("#0000FF"), CORINGA("FF00FF");
+    VERMELHO("[VERMELHO]"), VERDE("[VERDE]   "), AMARELO("[AMARELO] "), AZUL("[AZUL]    "), CORINGA("[ESPECIAL]");
 
     private String cor;
 
