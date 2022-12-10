@@ -1,5 +1,7 @@
 package com.uno.cartas;
 
+import com.uno.Main;
+
 public abstract class Carta {
     protected String cor;
     protected String valor;
@@ -22,5 +24,4 @@ public abstract class Carta {
     public String getClassificacao(){
         return classificacao;
     }
-
 }

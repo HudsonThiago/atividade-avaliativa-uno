@@ -1,4 +1,4 @@
-package com.uno;
+package com.uno.jogador;
 
 import com.uno.cartas.Baralho;
 import com.uno.cartas.Carta;
@@ -9,9 +9,9 @@ public class Jogador {
 
     private int posicao;
     private String nome;
-    private List<Carta> baralho;
+    private Baralho baralho;
 
-    public Jogador(int posicao, String nome, List<Carta> baralho){
+    public Jogador(int posicao, String nome, Baralho baralho){
         this.posicao = posicao;
         this.nome = nome;
         this.baralho = baralho;
@@ -25,7 +25,7 @@ public class Jogador {
         return nome;
     }
 
-    public List<Carta> getBaralho(){
+    public Baralho getBaralho(){
         return baralho;
     }
 }

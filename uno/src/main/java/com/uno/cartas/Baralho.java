@@ -15,11 +15,41 @@ public class Baralho {
         addCartasEspeciais();
         addCartasCoringa();
     }
+    public Baralho(boolean vazio){
+        if(!vazio){
+            addCartasNormais();
+            addCartasEspeciais();
+            addCartasCoringa();
+        }
+    }
 
     public Carta puxarCartaDoBaralho(){
         int cartaSorteada = Utils.random.nextInt(baralho.size());
         Carta carta = baralho.get(cartaSorteada);
         baralho.remove(cartaSorteada);
+        return carta;
+    }
+
+    public Carta puxarCartaNormalDoBaralho(){
+
+        boolean verificarCarta = true;
+        int cartaSorteada;
+        int contador=0;
+        Carta carta = baralho.get(0);
+
+        while(verificarCarta){
+            cartaSorteada = Utils.random.nextInt(baralho.size());
+            carta = baralho.get(cartaSorteada);
+
+            if(carta.getClassificacao().equals("normal")){
+                verificarCarta = false;
+                baralho.remove(cartaSorteada);
+            }
+            if(contador>200){
+                return carta;
+            }
+            contador++;
+        }
         return carta;
     }
 
@@ -45,15 +75,15 @@ public class Baralho {
             Carta cartaVerdeMaisDois = new CartaVerde("+2", Classificacao.ESPECIAL.get());
             Carta cartaAzulMaisDois = new CartaAzul("+2", Classificacao.ESPECIAL.get());
 
-            Carta cartaVermelhaBloqueio = new CartaVermelha("Ø", Classificacao.ESPECIAL.get());
-            Carta cartaAmarelaBloqueio = new CartaAmarela("Ø", Classificacao.ESPECIAL.get());
-            Carta cartaVerdeBloqueio = new CartaVerde("Ø", Classificacao.ESPECIAL.get());
-            Carta cartaAzulBloqueio = new CartaAzul("Ø", Classificacao.ESPECIAL.get());
+            Carta cartaVermelhaBloqueio = new CartaVermelha("bloqueio", Classificacao.ESPECIAL.get());
+            Carta cartaAmarelaBloqueio = new CartaAmarela("bloqueio", Classificacao.ESPECIAL.get());
+            Carta cartaVerdeBloqueio = new CartaVerde("bloqueio", Classificacao.ESPECIAL.get());
+            Carta cartaAzulBloqueio = new CartaAzul("bloqueio", Classificacao.ESPECIAL.get());
 
-            Carta cartaVermelhaInverter = new CartaVermelha("⟳", Classificacao.ESPECIAL.get());
-            Carta cartaAmarelaInverter = new CartaAmarela("⟳", Classificacao.ESPECIAL.get());
-            Carta cartaVerdeInverter = new CartaVerde("⟳", Classificacao.ESPECIAL.get());
-            Carta cartaAzulInverter = new CartaAzul("⟳", Classificacao.ESPECIAL.get());
+            Carta cartaVermelhaInverter = new CartaVermelha("inverter", Classificacao.ESPECIAL.get());
+            Carta cartaAmarelaInverter = new CartaAmarela("inverter", Classificacao.ESPECIAL.get());
+            Carta cartaVerdeInverter = new CartaVerde("inverter", Classificacao.ESPECIAL.get());
+            Carta cartaAzulInverter = new CartaAzul("inverter", Classificacao.ESPECIAL.get());
 
             baralho.add(cartaVermelhaMaisDois);
             baralho.add(cartaAmarelaMaisDois);
@@ -74,8 +104,8 @@ public class Baralho {
 
     private void addCartasCoringa(){
         for(int i=0;i<4;i++){
-            Carta cartaCoringa = new CartaCoringa("coringa", Classificacao.ESPECIAL.get());
-            Carta cartaCoringaMaisQuatro = new CartaCoringa("+4", Classificacao.ESPECIAL.get());
+            Carta cartaCoringa = new CartaCoringa("coringa", Classificacao.CORINGA.get());
+            Carta cartaCoringaMaisQuatro = new CartaCoringa("+4", Classificacao.CORINGA.get());
 
             baralho.add(cartaCoringa);
             baralho.add(cartaCoringaMaisQuatro);
