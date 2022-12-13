@@ -11,12 +11,29 @@ public class Jogador {
     private String nome;
     private Baralho baralho;
 
+
+
+
+    //-----------------------------------------------------------------------------------
+    // [Contrutor]
+    //
+    // Inicia os valores das variáveis do programa (posicao, nome e baralho).
+    //-----------------------------------------------------------------------------------
     public Jogador(int posicao, String nome, Baralho baralho){
         this.posicao = posicao;
         this.nome = nome;
         this.baralho = baralho;
     }
 
+
+
+
+
+    //-----------------------------------------------------------------------------------
+    // [GETS]
+    //
+    // Métodos para retornar os valores das variáveis de cada jogador instanciado.
+    //-----------------------------------------------------------------------------------
     public int getPosicao(){
         return posicao;
     }

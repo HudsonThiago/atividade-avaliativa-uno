@@ -1,41 +1,91 @@
 package com.uno.cartas;
-
-import com.uno.Main;
 import com.uno.utils.Utils;
-
 import java.util.ArrayList;
 import java.util.List;
 
 public class Baralho {
-
     public List<Carta> baralho = new ArrayList<>();
 
+
+
+
+    //-----------------------------------------------------------------------------------
+    // [Contrutores]
+    //
+    // Após fazer uma instância da classe, o baralho já iniciará com 112 cartas
+    // sendo: (80) cartas normais
+    //        (24) cartas especiais
+    //        (08) cartas coringas
+    //
+    // A instância também poderá ter um parâmetro booleano de 'vazio' que indica se o
+    // baralho iniciará com nenhuma carta (true) ou já preenchida (false).
+    //-----------------------------------------------------------------------------------
     public Baralho(){
+        embaralhar();
+    }
+
+    public Baralho(boolean vazio){
+        if(!vazio){
+            embaralhar();
+        }
+    }
+
+
+
+
+    //-----------------------------------------------------------------------------------
+    // [embaralhar]
+    //
+    // adiciona na lista 'baralho' cartas normais (ex.: numéricas),
+    // cartas especiais (ex.: bloqueios, inverter, etc...) e cartas coringas (ex.: +4)
+    //-----------------------------------------------------------------------------------
+    private void embaralhar(){
         addCartasNormais();
         addCartasEspeciais();
         addCartasCoringa();
     }
-    public Baralho(boolean vazio){
-        if(!vazio){
-            addCartasNormais();
-            addCartasEspeciais();
-            addCartasCoringa();
-        }
-    }
 
+
+
+
+    //-----------------------------------------------------------------------------------
+    // [puxarCartaDoBaralho]
+    //
+    // Verifica se existe cartas no baralho. Se não existir, adiciona novas cartas.
+    // Logo depois, é sorteado uma carta aleatória do baralho, essa carta é removida
+    // e sai como retorno da função.
+    //-----------------------------------------------------------------------------------
     public Carta puxarCartaDoBaralho(){
+
+        if(baralho.size() <= 6){
+            embaralhar();
+        }
+
         int cartaSorteada = Utils.random.nextInt(baralho.size());
         Carta carta = baralho.get(cartaSorteada);
         baralho.remove(cartaSorteada);
         return carta;
     }
 
+
+
+
+    //-----------------------------------------------------------------------------------
+    // [puxarCartaNormalDoBaralho]
+    //
+    // Semelhante ao último método, a única diferença é que retorna apenas cartas que
+    // possuem o campo 'classificacao' igual a 'normal'.
+    //-----------------------------------------------------------------------------------
     public Carta puxarCartaNormalDoBaralho(){
 
         boolean verificarCarta = true;
         int cartaSorteada;
         int contador=0;
         Carta carta = baralho.get(0);
+
+        if(baralho.size() <= 6){
+            embaralhar();
+        }
 
         while(verificarCarta){
             cartaSorteada = Utils.random.nextInt(baralho.size());
@@ -53,6 +103,14 @@ public class Baralho {
         return carta;
     }
 
+
+
+
+    //-----------------------------------------------------------------------------------
+    // [addCartasNormais]
+    //
+    // Adiciona um par de cartas numéricas ao baralho. Existem números que vão de 0 a 9.
+    //-----------------------------------------------------------------------------------
     private void addCartasNormais(){
         for(int i=0;i<2;i++){
             for(int j=0;j<10;j++){
@@ -68,6 +126,15 @@ public class Baralho {
             }
         }
     }
+
+
+
+
+    //-----------------------------------------------------------------------------------
+    // [addCartasEspeciais]
+    //
+    // Adiciona um par de cartas especiais ao baralho. Sendo elas: bloqueio, inverter e +2.
+    //-----------------------------------------------------------------------------------
     private void addCartasEspeciais(){
         for(int i=0;i<2;i++){
             Carta cartaVermelhaMaisDois = new CartaVermelha("+2", Classificacao.ESPECIAL.get());
@@ -102,6 +169,14 @@ public class Baralho {
         }
     }
 
+
+
+
+    //-----------------------------------------------------------------------------------
+    // [addCartasCoringa]
+    //
+    // Adiciona um par de cartas coringas ao baralho. Sendo elas: coringa e +4.
+    //-----------------------------------------------------------------------------------
     private void addCartasCoringa(){
         for(int i=0;i<4;i++){
             Carta cartaCoringa = new CartaCoringa("coringa", Classificacao.CORINGA.get());

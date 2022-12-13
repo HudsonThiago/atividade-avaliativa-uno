@@ -10,7 +10,18 @@ import java.util.List;
 
 public class Telas {
 
+
+
+
+    //-----------------------------------------------------------------------------------
+    // [telaPrincipal]
+    //
+    // Tela de início do jogo, verifica a opção que o jogador escolheu e redireciona.
+    // para a tela escolhida.
+    //-----------------------------------------------------------------------------------
     public static void telaPrincipal(){
+        Utils.clear();
+
         boolean opcaoInvalida = true;
 
         while(opcaoInvalida){
@@ -23,11 +34,11 @@ public class Telas {
             System.out.print("Digite o número da opção: ");
 
             try{
-                Main.opcao = Integer.parseInt(Utils.scanner.next());
+                Utils.opcao = Integer.parseInt(Utils.scanner.next());
             } catch (NumberFormatException e){
                 System.out.println("\n(!) OPÇÃO INVÁLIDA! TENTE NOVAMENTE!\n");
             } finally {
-                if(Main.opcao == 1 || Main.opcao == 2 || Main.opcao == 3){
+                if(Utils.opcao == 1 || Utils.opcao == 2 || Utils.opcao == 3){
                     opcaoInvalida = false;
                 } else {
                     Utils.clear();
@@ -36,13 +47,22 @@ public class Telas {
             }
         }
 
-        if(Main.opcao == 1){
+        if(Utils.opcao == 1){
             telaEscolherJogadores();
-        } else if(Main.opcao == 2){
+        } else if(Utils.opcao == 2){
             telaRegras();
         }
     }
 
+
+
+
+    //-----------------------------------------------------------------------------------
+    // [telaEscolherJogadores]
+    //
+    // Tela de seleção do jogador, verifica se todos os jogadores foram criados de
+    // maneira correta e redireciona para a tela do jogo.
+    //-----------------------------------------------------------------------------------
     private static void telaEscolherJogadores(){
         Utils.clear();
 
@@ -55,11 +75,11 @@ public class Telas {
             System.out.print("Digite o número de jogadores: ");
 
             try{
-                Main.numeroJogadores = Integer.parseInt(Utils.scanner.next());
+                Utils.numeroJogadores = Integer.parseInt(Utils.scanner.next());
             } catch (NumberFormatException e){
                 System.out.println("\n(!) OPÇÃO INVÁLIDA! TENTE NOVAMENTE!\n");
             } finally {
-                if(Main.numeroJogadores >= 2 && Main.numeroJogadores <= 4){
+                if(Utils.numeroJogadores >= 2 && Utils.numeroJogadores <= 4){
                     opcaoInvalida = false;
                     System.out.println("\n");
                 } else {
@@ -69,43 +89,62 @@ public class Telas {
             }
         }
 
-        for(int i=1;i<=Main.numeroJogadores;i++){
+        for(int i=1;i<=Utils.numeroJogadores;i++){
             System.out.print("Digite o nome do jogador "+i+": ");
             String nome = Utils.scanner.next();
             Baralho baralho = new Baralho(true);
 
             for(int j=0;j<5;j++){
-                baralho.baralho.add(Main.puxarCartaDoBaralhoPrincipal());
+                baralho.baralho.add(Utils.puxarCartaDoBaralhoPrincipal());
             }
 
             Jogador jogador = new Jogador(i,nome, baralho);
-            Main.jogadores.add(jogador);
+            Utils.jogadores.add(jogador);
         }
 
         telaJogo();
     }
 
+
+
+
+    //-----------------------------------------------------------------------------------
+    // [telaJogo]
+    //
+    // Tela que inicia o jogo, após os jogadores serem redirecionados para essa tela
+    // eles ficarão em loop na tela de [rodada] até houver um vencedor.
+    //-----------------------------------------------------------------------------------
     private static void telaJogo(){
 
-        Main.cartaRodada = Main.baralho.puxarCartaNormalDoBaralho();
+        Utils.cartaRodada = Utils.baralho.puxarCartaNormalDoBaralho();
 
-        while(!Main.vitoria){
-            rodada(Main.jogadorAtual);
+        while(!Utils.vitoria){
+            rodada(Utils.jogadorAtual);
         }
 
         telaVitoria();
     }
 
+
+
+
+    //-----------------------------------------------------------------------------------
+    // [rodada]
+    //
+    // Tela principal do jogo, ela imprime imprime os valores dos jogadores da rodada,
+    // apresenta a quantidade de cartas que cada jogador tem, a carta que o último jogador jogou
+    // e as cartas do jogador atual.
+    //-----------------------------------------------------------------------------------
     private static void rodada(int indiceJogador){
         boolean opcaoInvalida = true;
-        List<Jogador> jogadores = Main.jogadores;
+        List<Jogador> jogadores = Utils.jogadores;
         String mensagem = "\nEscolha uma de suas cartas: ";
 
         while(opcaoInvalida){
             Utils.clear();
             System.out.println("─────────────────────────────────────────────");
             System.out.println("  CARTA DA RODADA             ");
-            System.out.println("  "+Main.cartaRodada.getCor()+" - "+Main.cartaRodada.getValor());
+            System.out.println("  "+Utils.cartaRodada.getCor()+" - "+Utils.cartaRodada.getValor());
             System.out.println("─────────────────────────────────────────────");
             for(Jogador jogador:jogadores){
                 if(jogador.getBaralho().baralho.size()>1){
@@ -116,7 +155,7 @@ public class Telas {
             }
             System.out.println("─────────────────────────────────────────────");
 
-            Jogador jogador = Main.jogadores.get(indiceJogador);
+            Jogador jogador = Utils.jogadores.get(indiceJogador);
             int numeroCartas = jogador.getBaralho().baralho.size();
             System.out.println("Vez de ["+jogador.getNome()+"] fazer a sua jogada!");
             System.out.println("\n      |Cor|        |Valor|");
@@ -124,14 +163,14 @@ public class Telas {
             for(int indiceCarta = 0; indiceCarta<numeroCartas; indiceCarta++){
                 Carta carta = jogador.getBaralho().baralho.get(indiceCarta);
                 System.out.print("("+(indiceCarta+1)+") - "+carta.getCor()+" - "+carta.getValor());
-                if(cartaJogavel(carta, Main.cartaRodada)){
+                if(cartaJogavel(carta, Utils.cartaRodada)){
                     System.out.print(" [pode jogar]\n");
                 } else {
                     System.out.print("\n");
                 }
             }
 
-            boolean verificaCartas = jogador.getBaralho().baralho.stream().anyMatch(c -> cartaJogavel(c, Main.cartaRodada));
+            boolean verificaCartas = jogador.getBaralho().baralho.stream().anyMatch(c -> cartaJogavel(c, Utils.cartaRodada));
 
             if(verificaCartas){
                 System.out.print(mensagem);
@@ -142,8 +181,8 @@ public class Telas {
                     if(opcao >= 1 && opcao <= numeroCartas){
                         Carta cartaEscolhida = jogador.getBaralho().baralho.get(opcao-1);
 
-                        if(cartaJogavel(cartaEscolhida, Main.cartaRodada)){
-                            Main.cartaRodada = cartaEscolhida;
+                        if(cartaJogavel(cartaEscolhida, Utils.cartaRodada)){
+                            Utils.cartaRodada = cartaEscolhida;
                             jogador.getBaralho().baralho.remove(opcao-1);
 
                             acaoCartasEspeciais(cartaEscolhida);
@@ -161,7 +200,7 @@ public class Telas {
 
             } else {
                 System.out.println("\n(!) OPA! Você não tem nenhuma carta que possa jogar!\nSendo assim, você deve puxar uma carta e passar a vez!\n\nDigite um caractere para continuar: ");
-                jogador.getBaralho().baralho.add(Main.puxarCartaDoBaralhoPrincipal());
+                jogador.getBaralho().baralho.add(Utils.puxarCartaDoBaralhoPrincipal());
                 Utils.scanner.next();
                 opcaoInvalida = false;
             }
@@ -170,14 +209,21 @@ public class Telas {
         int quantidadeCartas = jogadores.get(indiceJogador).getBaralho().baralho.size();
 
         if(quantidadeCartas==0){
-            Main.vitoria=true;
-            Main.nomeGanhador = jogadores.get(indiceJogador).getNome();
+            Utils.vitoria=true;
+            Utils.nomeGanhador = jogadores.get(indiceJogador).getNome();
         } else {
             proximoJogador();
         }
     }
 
 
+
+
+    //-----------------------------------------------------------------------------------
+    // [telaRegras]
+    //
+    // Tela que imprime as regras do jogo.
+    //-----------------------------------------------------------------------------------
     private static void telaRegras(){
         Utils.clear();
         System.out.println("┌──────────────────────────────────────────────────┐");
@@ -206,13 +252,29 @@ public class Telas {
         telaPrincipal();
     }
 
+
+
+
+    //-----------------------------------------------------------------------------------
+    // [telaVitoria]
+    //
+    // Tela que imprime o ganhador do jogo.
+    //-----------------------------------------------------------------------------------
     private static void telaVitoria(){
         Utils.clear();
         System.out.println("──────────────────────────────────────────────────────");
-        System.out.println("  "+Main.nomeGanhador+" venceu o jogo! parabéns!                                          ");
+        System.out.println("  "+Utils.nomeGanhador+" venceu o jogo! parabéns!                                          ");
         System.out.println("──────────────────────────────────────────────────────\n\n\n\n\n\n");
     }
 
+
+
+
+    //-----------------------------------------------------------------------------------
+    // [cartaJogavel]
+    //
+    // retorna um booleano se a carta atual jogada é compatível com a última carta.
+    //-----------------------------------------------------------------------------------
     private static boolean cartaJogavel(Carta carta, Carta cartaRodada){
         return cartaRodada.getClassificacao().equals(Classificacao.CORINGA.get()) ||
                 carta.getCor().equals(cartaRodada.getCor()) ||
@@ -220,10 +282,18 @@ public class Telas {
                 carta.getClassificacao().equals(Classificacao.CORINGA.get());
     }
 
+
+
+
+    //-----------------------------------------------------------------------------------
+    // [acaoCartasEspeciais]
+    //
+    // Realiza a ação das cartas especiais do jogo (bloquear, inverter, +2 e +4).
+    //-----------------------------------------------------------------------------------
     private static void acaoCartasEspeciais(Carta cartaEscolhida){
 
         if(cartaEscolhida.getValor().equals("inverter")){
-            Main.sentidoHorario = !Main.sentidoHorario;
+            Utils.sentidoHorario = !Utils.sentidoHorario;
 
         } else if(cartaEscolhida.getValor().equals("bloqueio")){
             proximoJogador();
@@ -231,35 +301,44 @@ public class Telas {
         } else if(cartaEscolhida.getValor().equals("+2")){
             int indiceProximoJogador;
 
-            if(Main.sentidoHorario){
-                indiceProximoJogador = Main.transformarIndice(Main.jogadorAtual+1);
+            if(Utils.sentidoHorario){
+                indiceProximoJogador = Utils.transformarIndice(Utils.jogadorAtual+1);
             } else {
-                indiceProximoJogador = Main.transformarIndice(Main.jogadorAtual-1);
+                indiceProximoJogador = Utils.transformarIndice(Utils.jogadorAtual-1);
             }
-            Jogador proximoJogador = Main.jogadores.get(indiceProximoJogador);
+            Jogador proximoJogador = Utils.jogadores.get(indiceProximoJogador);
             for(int i=0;i<2;i++){
-                proximoJogador.getBaralho().baralho.add(Main.puxarCartaDoBaralhoPrincipal());
+                proximoJogador.getBaralho().baralho.add(Utils.puxarCartaDoBaralhoPrincipal());
             }
         } else if(cartaEscolhida.getValor().equals("+4")){
             int indiceProximoJogador;
 
-            if(Main.sentidoHorario){
-                indiceProximoJogador = Main.transformarIndice(Main.jogadorAtual+1);
+            if(Utils.sentidoHorario){
+                indiceProximoJogador = Utils.transformarIndice(Utils.jogadorAtual+1);
             } else {
-                indiceProximoJogador = Main.transformarIndice(Main.jogadorAtual-1);
+                indiceProximoJogador = Utils.transformarIndice(Utils.jogadorAtual-1);
             }
-            Jogador proximoJogador = Main.jogadores.get(indiceProximoJogador);
+            Jogador proximoJogador = Utils.jogadores.get(indiceProximoJogador);
             for(int i=0;i<4;i++){
-                proximoJogador.getBaralho().baralho.add(Main.puxarCartaDoBaralhoPrincipal());
+                proximoJogador.getBaralho().baralho.add(Utils.puxarCartaDoBaralhoPrincipal());
             }
         }
     }
 
+
+
+
+    //-----------------------------------------------------------------------------------
+    // [proximoJogador]
+    //
+    // Realiza a troca do jogador atual para o próximo. Essa função é chamada
+    // no fim de cada turno.
+    //-----------------------------------------------------------------------------------
     private static void proximoJogador(){
-        if(Main.sentidoHorario){
-            Main.jogadorAtual = Main.transformarIndice(Main.jogadorAtual+1);
+        if(Utils.sentidoHorario){
+            Utils.jogadorAtual = Utils.transformarIndice(Utils.jogadorAtual+1);
         } else {
-            Main.jogadorAtual = Main.transformarIndice(Main.jogadorAtual-1);
+            Utils.jogadorAtual = Utils.transformarIndice(Utils.jogadorAtual-1);
         }
     }
 }
